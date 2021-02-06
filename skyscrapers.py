@@ -2,24 +2,19 @@
 https://github.com/tkachyshyn/skyscrapers
 """
 
-# import doctest
 def read_input(path: str):
     """
     Read game board file from path.
     Return list of str.
-
-    >>> read_input("semester2/lab1/check.txt")
-    ['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']
     """
-    with open(path) as f:
-        content = f.readlines()
+    with open(path) as file:
+        content = file.readlines()
 
     lst = [obj[:-1] for obj in content if obj[-1] != '*']
 
     if lst[-1] != content[-1]:
         lst.append(content[-1])
     return lst
-# print(read_input('semester2/lab1/check.txt'))
 
 def left_to_right_check(input_line: str, pivot: int):
     """
@@ -36,7 +31,7 @@ def left_to_right_check(input_line: str, pivot: int):
     False
     """
     lst = [input_line[1]]
-    
+
     for i in range(2, len(input_line[:-1])):
         if input_line[i] > input_line[i - 1]:
             if input_line[i] not in lst:
@@ -49,11 +44,9 @@ def left_to_right_check(input_line: str, pivot: int):
             if int(lst[k]) < int(lst[j]):
                 lst.pop(k)
 
-    
     if pivot == len(lst):
         return True
     return False
-# print(left_to_right_check("132354*", 3))
 
 def check_not_finished_board(board: list):
     """
@@ -66,13 +59,12 @@ def check_not_finished_board(board: list):
     >>> check_not_finished_board(['***21**', '412453*'])
     True
     """
-    
+
     lst = ["F" for item in board if "?" in item]
-    
+
     if "F" in lst:
         return False
     return True
-# print(check_not_finished_board(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']))
 
 def check_uniqueness_in_rows(board: list):
     """
@@ -80,33 +72,35 @@ def check_uniqueness_in_rows(board: list):
 
     Return True if buildings in a row have unique length, False otherwise.
 
-    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', \
-        '*543215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*543215', \
+    '*35214*', '*41532*', '*2*1***'])
     True
-    >>> check_uniqueness_in_rows(['***21**', '452453*', '423145*', \
-        '*543215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_uniqueness_in_rows(['***21**', '452453*', '423145*', '*543215', \
+    '*35214*', '*41532*', '*2*1***'])
     False
-    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', \
-        '*553215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*553215', \
+    '*35214*', '*41532*', '*2*1***'])
     False
     """
     lst = []
-    # board = [item.replace("*", "") for item in board]
     for obj in board:
         if str(len(obj)) not in obj:
             if obj[0] != "*":
                 obj = obj[1:]
             if obj[-1] != "*":
                 obj = obj[:-1]
-        for el in obj:
-            if obj.count(el) == 2 and el != "*":
+        for element in obj:
+            if obj.count(element) == 2 and element != "*":
                 lst.append("f")
     if "f" in lst:
         return False
     return True
-print(check_uniqueness_in_rows(['***212*', '412453*', '423145*', '*543215', '*35214*', '441532*', '*22222*']))
-            
+
 def f_list(item):
+    """
+    creates list with "f" elements if the ivsibility of the
+    elements is not the same as required
+    """
     new_list = []
     lst = [item[1]]
 
@@ -124,17 +118,12 @@ def f_list(item):
                 k += 1
                 if int(lst[k]) < int(lst[j]):
                     lst.pop(k)
-                    k += 1
-                
+                    # k += 1
+
         if len(lst) != int(item[0]):
             new_list.append("f")
 
-        # sorted_lst = lst.sort()
-        # if sorted_lst != lst:
-        #     new_list.append("f")
-
     return new_list
-# print(f_list('412453*'))
 
 def check_horizontal_visibility(board: list):
     """
@@ -144,43 +133,42 @@ def check_horizontal_visibility(board: list):
      i.e., for line 412453* , hint is 4, and 1245 are the four buildings
       that could be observed from the hint looking to the right.
 
-    >>> check_horizontal_visibility(['***21**', '412453*', '423145*', \
-        '*543215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_horizontal_visibility(['***21**', '412453*', '423145*', '*543215',\
+    '*35214*', '*41532*', '*2*1***'])
     True
-    >>> check_horizontal_visibility(['***21**', '452453*', '423145*', \
-        '*543215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_horizontal_visibility(['***21**', '452453*', '423145*', '*543215',\
+    '*35214*', '*41532*', '*2*1***'])
     False
-    >>> check_horizontal_visibility(['***21**', '452413*', '423145*', \
-        '*543215', '*35214*', '*41532*', '*2*1***'])
+    >>> check_horizontal_visibility(['***21**', '452413*', '423145*', '*543215',\
+    '*35214*', '*41532*', '*2*1***'])
     False
     """
     lst = []
-    
-    for item in board: 
-        
+
+    for item in board:
+
         if item[0] != "*" and item[-1] == "*":
-            for el in f_list(item):
-                lst.append(el)
+            for element in f_list(item):
+                lst.append(element)
 
         if item[0] == "*" and item[-1] != "*":
             item = item[::-1]
-            for el in f_list(item):
-                lst.append(el)    
-        
+            for element in f_list(item):
+                lst.append(element)
+
         elif item[0] != "*" and item[-1] != "*":
             # l = f_list(item)
-            for el in f_list(item):
-                lst.append(el)
-                
+            for element in f_list(item):
+                lst.append(element)
+
             item = item[::-1]
             # l1 = f_list(item)
-            for el in f_list(item):
-                lst.append(el)
-    
+            for element in f_list(item):
+                lst.append(element)
+
     if "f" in lst:
         return False
-    return True           
-# print(check_horizontal_visibility(['2413251']))
+    return True
 
 def check_columns(board: list):
     """
@@ -203,21 +191,16 @@ def check_columns(board: list):
             column += item[i]
         lst.append(column)
     lst = lst[1:-1]
-    # return lst
     if check_uniqueness_in_rows(lst) == True and \
         check_horizontal_visibility(lst) == True:
         return True
     return False
-# print(check_columns(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']))
 
 def check_skyscrapers(input_path: str):
     """
     Main function to check the status of skyscraper game board.
     Return True if the board status is compliant with the rules,
     False otherwise.
-
-    >>> check_skyscrapers("semester2/lab1/check.txt")
-    True
     """
     board = read_input(input_path)
     if check_not_finished_board(board) == True and\
@@ -226,8 +209,3 @@ def check_skyscrapers(input_path: str):
         check_columns(board) == True:
         return True
     return False
-
-# if __name__ == "__main__":
-    # print(check_skyscrapers("semester2/lab1/check.txt"))
-s
-# print(doctest.testmod())
