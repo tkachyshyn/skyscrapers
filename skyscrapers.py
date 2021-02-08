@@ -139,9 +139,6 @@ def check_horizontal_visibility(board: list):
     >>> check_horizontal_visibility(['***21**', '452453*', '423145*', '*543215',\
     '*35214*', '*41532*', '*2*1***'])
     False
-    >>> check_horizontal_visibility(['***21**', '452413*', '423145*', '*543215',\
-    '*35214*', '*41532*', '*2*1***'])
-    False
     """
     lst = []
 
