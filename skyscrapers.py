@@ -98,7 +98,7 @@ def check_uniqueness_in_rows(board: list):
 
 def f_list(item):
     """
-    creates list with "f" elements if the ivsibility of the
+    create a list with "f" strings if the visibility of the
     elements is not the same as required
     """
     new_list = []
